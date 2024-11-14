@@ -38,10 +38,10 @@ else:
 
     # Verificar qual empresa é melhor abaixo e acima da distância de equilíbrio
     if TFDif / VQRDif > 0:
-        # Empresa 1 é mais barata para distâncias menores, Empresa 2 para maiores
+        # Empresa 2 é mais barata para distâncias menores, Empresa 1 para maiores
         resultado = f"Empresa 2 quando a distância < {equal_formatado}, Tanto faz quando a distância = {equal_formatado}, Empresa 1 quando a distância > {equal_formatado}"
     else:
-        # Empresa 2 é mais barata para distâncias menores, Empresa 1 para maiores
+        # Empresa 1 é mais barata para distâncias menores, Empresa 2 para maiores
         resultado = f"Empresa 1 quando a distância < {equal_formatado}, Tanto faz quando a distância = {equal_formatado}, Empresa 2 quando a distância > {equal_formatado}"
 
 # Imprimir o resultado

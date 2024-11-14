@@ -24,7 +24,7 @@ def expand_combinations(morse_code):
             # Atualiza as combinações com as novas geradas
             combinations = new_combinations
     
-    # Retorna todas as combinações geradas para a string de morse_code
+    # Retorna todas as combinações gerad'as para a string de morse_code
     return combinations
 
 def translate(morse):
