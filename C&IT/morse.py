@@ -1,54 +1,58 @@
-#Mapeamento das letras a serem usadas no desafio
-dicionario = {
-    ".": "E",
-    "..": "I",
-    "...": "S",
-    "..-": "U",
-    ".-": "A",
-    ".-.": "R",
-    ".--": "W",
-    "-": "T",
-    "-.": "N",
-    "-..": "D",
-    "-.-": "K",
-    "--": "M",
-    "--.": "G",
-    "---": "O"
-}
+# Dicionário que mapeia combinações de código Morse para letras
 
-def combinations(morse_code):
+# Função interna para expandir combinações substituindo '?' por '.' e '-'
+def expand_combinations(morse_code):
+    # Se não há '?', a string já é válida e retorna apenas ela mesma
     if "?" not in morse_code:
-        return [morse_code]     #Retorna o código original se não houver "?"
-         #Lista para armazenar as combinações possíveis
-    combinations = []
-    for char in morse_code:
-        #Se o caractere é "?", cria combinações com "." e "-"
-        if char == "?":
-            if not combinations:            #Combionations vazio
-                combinations = [".", "-"]   #Inicializa com as duas possibilidades para '?'
-            else:
-                combinations = [combo + "." for combo in combinations] +  [combo + "-" for combo in combinations] #Expande cada combinação já existente com '.' e '-'
-        #Se o caractere não for '?'
-        else:
-            #E combinations estiver vazio
-            if not combinations:
-                #Inicializa com o caractere
-                combinations = [char]
-            #Se combinations não estiver vazio
-            else:
-                #Adiciona o caractere a cada combinação já existente
-                combinations = [combo + char for combo in combinations]
-
+        return [morse_code]
     
+    # Lista para armazenar as combinações geradas
+    combinations = [morse_code]  # Começamos com a palavra original
+    
+    # Itera sobre cada caractere de morse_code
+    for i in range(len(morse_code)):
+        # Verifica se encontramos um '?', indicando que precisamos gerar possibilidades
+        if morse_code[i] == "?":
+            # Cria uma nova lista de combinações substituindo '?' por '.' e '-'
+            new_combinations = []
+            # Para cada combinação existente, substituímos '?' por '.' e '-'
+            for combo in combinations:
+                # Substitui '?' por '.' e adiciona a nova combinação
+                new_combinations.append(combo[:i] + "." + combo[i+1:])
+                # Substitui '?' por '-' e adiciona a nova combinação
+                new_combinations.append(combo[:i] + "-" + combo[i+1:])
+            # Atualiza as combinações com as novas geradas
+            combinations = new_combinations
+    
+    # Retorna todas as combinações geradas para a string de morse_code
     return combinations
 
+def translate(morse):
+    # Usa expand_combinations para obter todas as possibilidades
+    possibilities = expand_combinations(morse)
 
-
-def morse_to_text(morse_code):
-    possibilities = combinations(morse_code) #Usa a outra função para encontrar as possíveis combinações
-    results = [dicionario.get(code) for code in possibilities if code in dicionario] #Filtra as combinações que existem no dicionário
+    # Filtra apenas as combinações válidas no dicionário Morse e retorna suas letras
+    results = [morse_dict.get(code) for code in possibilities if code in morse_dict]
     return results
 
+
+morse_dict = {
+    ".": "E",
+    "-": "T",
+    "..": "I",
+    ".-": "A",
+    "-.": "N",
+    "--": "M",
+    "...": "S",
+    "..-": "U",
+    ".-.": "R",
+    ".--": "W",
+    "-..": "D",
+    "-.-": "K",
+    "--.": "G",
+    "---": "O",
+}
+# Exemplo de uso
 codigo = input()
-resultado = morse_to_text(codigo)
-print(resultado)
+resultado = translate(codigo)
+print("Possíveis resultados:", resultado)
