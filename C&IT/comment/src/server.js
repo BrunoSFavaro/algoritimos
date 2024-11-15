@@ -26,11 +26,13 @@ const createServer = (pool, port = 3000) => {
 
       if (comment.parent_id === null) {
         // Comentário raiz, sem parent_id
+        delete formattedComment.parent_id;
         rootComments.push(formattedComment);
       } else {
         // Comentário filho, associa ao parent_id
         const parentComment = commentMap[comment.parent_id];
         if (parentComment) {
+          delete formattedComment.parent_id;  // Removendo o parent_id dos filhos também
           parentComment.children.push(formattedComment);
         }
       }
@@ -61,11 +63,11 @@ const createServer = (pool, port = 3000) => {
       // Consulta para buscar todos os comentários relacionados ao post
       const result = await pool.query(`
         WITH RECURSIVE CommentTree AS (
-          SELECT id, text, parent_id, post_id
+          SELECT id, text, parent_id
           FROM comments
           WHERE post_id = $1 AND parent_id IS NULL
           UNION ALL
-          SELECT c.id, c.text, c.parent_id, c.post_id
+          SELECT c.id, c.text, c.parent_id
           FROM comments c
           INNER JOIN CommentTree ct ON ct.id = c.parent_id
         )
@@ -146,16 +148,16 @@ const startServer = async () => {
     INSERT INTO comments (text, post_id) VALUES ('comment 1.2', 1)
   `);
   await client.query(`
-    INSERT INTO comments (text, post_id) VALUES ('comment 2.1', 2)
-  `);
-  await client.query(`
-    INSERT INTO comments (text, post_id) VALUES ('comment 2.2', 2)
-    `);
-  await client.query(`
     INSERT INTO comments (text, parent_id) VALUES ('comment 1.1.1', 1)
   `);
   await client.query(`
     INSERT INTO comments (text, parent_id) VALUES ('comment 1.1.2', 1)
+  `);
+  await client.query(`
+    INSERT INTO comments (text, post_id) VALUES ('comment 2.1', 2)
+  `);
+  await client.query(`
+    INSERT INTO comments (text, post_id) VALUES ('comment 2.2', 2)
   `);
 
   client.release();
