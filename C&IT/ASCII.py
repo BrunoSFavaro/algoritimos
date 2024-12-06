@@ -44,6 +44,6 @@ digitos = {
   ' ' : ["   ", "   ", "   "] #Adicionado para tratamento do zero à esquerda
 }
 
-time = "should work on 06:03"
+time = str(input())
 print(seven_segmentify(time))
 
