@@ -1,0 +1,22 @@
+{
+  "name": "comment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "mocha test/candidate.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chai": "^5.1.2",
+    "chai-http": "^5.1.1",
+    "express": "^4.21.1",
+    "pg": "^8.13.1"
+  }
+}
